@@ -1,0 +1,11 @@
+body {
+  padding-bottom: 20px;
+  /* background-image: url('/img/landscape.jpg'); */
+  background: linear-gradient(135deg, #f0f8ff 0%, #d7d7d7 100%);
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
