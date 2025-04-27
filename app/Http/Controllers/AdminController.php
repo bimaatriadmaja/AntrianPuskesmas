@@ -113,28 +113,37 @@ class AdminController extends Controller
     
     public function lihatantrian(Request $request)
     {
+        // Ambil data search dan poli_filter dari request
         $search = $request->get('search');
         $poli_filter = $request->get('poli_filter');
-    
-        $antrians = Antrian::query()
+
+        // Ambil list poli untuk filter
+        $poli_list = JadwalDokter::select('poli')->distinct()->pluck('poli');
+
+        // Ambil antrian dengan relasi ke jadwal_dokter
+        $antrians = Antrian::with('jadwalDokter')
             ->when($search, function ($query) use ($search) {
-                $query->where('nama_dokter', 'like', '%' . $search . '%')
-                    ->orWhere('nip', 'like', '%' . $search . '%')
-                    ->orWhere('poli', 'like', '%' . $search . '%');
+                $query->where(function($q) use ($search) {
+                    // Cari berdasarkan kolom-kolom yang relevan
+                    $q->where('no_antrian', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('jadwalDokter', function ($q) use ($search) {
+                        $q->where('nama_dokter', 'like', '%' . $search . '%')
+                            ->orWhere('poli', 'like', '%' . $search . '%');
+                    });
+                });
             })
             ->when($poli_filter, function ($query) use ($poli_filter) {
-                $query->where('poli', $poli_filter);
+                $query->whereHas('jadwalDokter', function ($q) use ($poli_filter) {
+                    $q->where('poli', $poli_filter);
+                });
             })
             ->paginate(10);
-    
-            $poli_list = Antrian::select('poli')->groupBy('poli')->pluck('poli');
 
+        // Return view dengan data antrian dan list poli
         return view('admin.menu.antrian-show', compact('antrians', 'poli_list', 'search', 'poli_filter'));
-
-        $this->hapusAntrianLama();
-
-        $antrians = Antrian::where('user_id', auth()->id())->get();
-        return view('admin.menu.antrian-show', compact('antrians'));
     }
 
     public function panduan()

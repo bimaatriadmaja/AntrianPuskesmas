@@ -151,33 +151,59 @@ class AntrianController extends Controller
         $pdf = FacadePdf::loadView('dashboard.antrian.cetak', compact('antrian'));
         return $pdf->stream('antrian-' . $antrian->no_antrian . '.pdf');
     }
-    
 
-    public function hapusAntrianKadaluarsa()
+    public function hapusSemua(Request $request)
     {
-        $hariIni = Carbon::today()->toDateString();
-    
-        // Ambil semua antrian yang lebih kecil dari hari ini
-        $antrianKadaluarsa = Antrian::where('tgl_antrian', '<', $hariIni)->get();
-    
-        $jumlahTerhapus = $antrianKadaluarsa->count();
-    
-        // Loop untuk mengupdate kuota jadwal dokter yang relevan
-        foreach ($antrianKadaluarsa as $antrian) {
-            $jadwalDokter = $antrian->jadwalDokter;  // Ambil jadwal dokter terkait
-            if ($jadwalDokter) {
-                // Tambahkan kuota dokter
+        // Ambil semua antrian yang ada
+        $antrians = Antrian::all();
+        
+        // Iterasi setiap antrian untuk mengembalikan kuota
+        foreach ($antrians as $antrian) {
+            // Cek apakah jadwal dokter ada
+            if ($antrian->jadwalDokter) {
+                // Ambil jadwal dokter
+                $jadwalDokter = $antrian->jadwalDokter;
+
+                // Kembalikan kuota
                 $jadwalDokter->kuota += 1;
                 $jadwalDokter->save();
             }
         }
+
+        // Menghapus seluruh data antrian
+        Antrian::truncate();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->route('admin.menu.antrian-show')->with('success', 'Semua antrian telah dihapus dan kuota telah dikembalikan!');
+    }
     
-        // Hapus antrian yang kadaluarsa
-        Antrian::where('tgl_antrian', '<', $hariIni)->delete();
+
+    // Hapus otomatis pake windows task scheduler
+    // public function hapusAntrianKadaluarsa()
+    // {
+    //     $hariIni = Carbon::today()->toDateString();
     
-        return response()->json([
-            'message' => "$jumlahTerhapus antrian kadaluarsa berhasil dihapus dan kuota dokter telah ditambahkan."
-        ]);
-    }    
+    //     // Ambil semua antrian yang lebih kecil dari hari ini
+    //     $antrianKadaluarsa = Antrian::where('tgl_antrian', '<', $hariIni)->get();
+    
+    //     $jumlahTerhapus = $antrianKadaluarsa->count();
+    
+    //     // Loop untuk mengupdate kuota jadwal dokter yang relevan
+    //     foreach ($antrianKadaluarsa as $antrian) {
+    //         $jadwalDokter = $antrian->jadwalDokter;  // Ambil jadwal dokter terkait
+    //         if ($jadwalDokter) {
+    //             // Tambahkan kuota dokter
+    //             $jadwalDokter->kuota += 1;
+    //             $jadwalDokter->save();
+    //         }
+    //     }
+    
+    //     // Hapus antrian yang kadaluarsa
+    //     Antrian::where('tgl_antrian', '<', $hariIni)->delete();
+    
+    //     return response()->json([
+    //         'message' => "$jumlahTerhapus antrian kadaluarsa berhasil dihapus dan kuota dokter telah ditambahkan."
+    //     ]);
+    // }    
 
 }

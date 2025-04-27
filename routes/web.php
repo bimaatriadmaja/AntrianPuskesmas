@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profil-edit', [UserController::class, 'edit'])->name('dashboard.edit-profil');
     Route::put('/profil/{id}', [UserController::class, 'update'])->name('dashboard.update-profil');
     Route::get('/antrian-pdf/{id}', [AntrianController::class, 'cetakAntrian'])->name('antrian.pdf');
-    Route::get('/hapus-antrian-kadaluarsa', [AntrianController::class, 'hapusAntrianKadaluarsa']);
+    // Route::get('/hapus-antrian-kadaluarsa', [AntrianController::class, 'hapusAntrianKadaluarsa']); //ini otomatis pake windows task scheduler
     // routes/web.php
     Route::get('/panduan-sistem', [UserController::class, 'panduan'])->name('panduan.index');
 
@@ -73,6 +73,7 @@ Route::middleware(['admin'])->group(function() {
     Route::delete('/jadwal/{id}', [JadwalDokterController::class, 'destroy'])->name('admin.menu.jadwal-destroy');
     Route::get('/lihatantrian', [AdminController::class, 'lihatantrian'])->name('admin.menu.antrian-show');
     Route::get('/panduan/admin', [AdminController::class, 'panduan'])->name('admin.panduan.index');
+    Route::delete('/admin/antrian/hapus-semua', [AntrianController::class, 'hapusSemua'])->name('admin.antrian.hapusSemua');
 });
 
 
