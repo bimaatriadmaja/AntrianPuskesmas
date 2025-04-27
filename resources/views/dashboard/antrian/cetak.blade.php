@@ -42,8 +42,8 @@
     <div class="container">
         <p class="clinic-name"> Puskesmas Delanggu </p>
         <div class="separator"></div>
-        <p><strong>Poli:</strong> {{ $antrian->poli }}</p>
-        <p><strong>Sesi:</strong> {{ $antrian->sesi }}</p>
+        <p><strong>Poli:</strong> {{ $antrian->jadwalDokter->poli }}</p>
+        <p><strong>Dokter:</strong> {{ $antrian->jadwalDokter->nama_dokter }}</p>
         <div class="separator"></div>
         <p>No. Antrian Anda:</p>
         <p class="queue-number">{{ $antrian->no_antrian }}</p>
