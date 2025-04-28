@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 27, 2025 at 02:00 AM
+-- Generation Time: Apr 28, 2025 at 05:15 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.12
 
@@ -33,6 +33,7 @@ CREATE TABLE `antrian` (
   `user_id` bigint UNSIGNED NOT NULL,
   `jadwal_dokter_id` bigint UNSIGNED NOT NULL,
   `tgl_antrian` date NOT NULL,
+  `status` enum('ditunda','dipanggil','dibatalkan') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ditunda',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -41,9 +42,19 @@ CREATE TABLE `antrian` (
 -- Dumping data for table `antrian`
 --
 
-INSERT INTO `antrian` (`id`, `no_antrian`, `user_id`, `jadwal_dokter_id`, `tgl_antrian`, `created_at`, `updated_at`) VALUES
-(5, 'N001', 3, 7, '2025-04-26', '2025-04-26 08:32:30', '2025-04-26 08:32:30'),
-(6, 'N002', 2, 7, '2025-04-26', '2025-04-26 10:22:41', '2025-04-26 10:22:41');
+INSERT INTO `antrian` (`id`, `no_antrian`, `user_id`, `jadwal_dokter_id`, `tgl_antrian`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'N001', 3, 7, '2025-04-28', 'dipanggil', '2025-04-28 03:37:46', '2025-04-28 04:22:12'),
+(2, 'K001', 3, 6, '2025-04-28', 'ditunda', '2025-04-28 03:48:07', '2025-04-28 03:48:07'),
+(3, 'L001', 3, 4, '2025-04-28', 'ditunda', '2025-04-28 03:53:14', '2025-04-28 03:53:14'),
+(4, 'A102', 1, 1, '2025-04-27', 'ditunda', '2025-04-28 04:21:24', '2025-04-28 04:21:24'),
+(5, 'B203', 1, 1, '2025-04-26', 'dipanggil', '2025-04-28 04:21:24', '2025-04-28 04:21:24'),
+(6, 'C304', 1, 1, '2025-04-21', 'dibatalkan', '2025-04-28 04:21:24', '2025-04-28 04:21:24'),
+(7, 'U001', 3, 1, '2025-04-28', 'ditunda', '2025-04-28 04:25:57', '2025-04-28 04:25:57'),
+(8, 'G001', 3, 2, '2025-04-28', 'ditunda', '2025-04-28 04:26:03', '2025-04-28 04:26:03'),
+(9, 'T001', 3, 3, '2025-04-28', 'ditunda', '2025-04-28 04:26:09', '2025-04-28 04:26:09'),
+(10, 'B001', 3, 5, '2025-04-28', 'ditunda', '2025-04-28 04:26:18', '2025-04-28 04:26:18'),
+(11, 'B002', 2, 5, '2025-04-28', 'ditunda', '2025-04-28 04:38:59', '2025-04-28 04:38:59'),
+(12, 'G002', 2, 2, '2025-04-28', 'ditunda', '2025-04-28 04:39:07', '2025-04-28 04:39:07');
 
 -- --------------------------------------------------------
 
@@ -82,11 +93,11 @@ CREATE TABLE `jadwal_dokter` (
 --
 
 INSERT INTO `jadwal_dokter` (`id`, `nip`, `nama_dokter`, `poli`, `kuota`, `jam_mulai`, `jam_selesai`) VALUES
-(1, '123001', 'Dr. Andi Wijaya', 'umum', 25, '07:00:00', '10:00:00'),
-(2, '123002', 'Dr. Rani Susanti', 'gigi', 25, '15:00:00', '18:00:00'),
-(3, '123003', 'Dr. Budi Santoso', 'tht', 25, '08:00:00', '12:00:00'),
-(4, '123004', 'Dr. Clara Dewi', 'lansia & disabilitas', 25, '10:00:00', '14:00:00'),
-(5, '123005', 'Dr. Eka Purnama', 'balita', 25, '09:00:00', '11:00:00'),
+(1, '123001', 'Dr. Andi Wijaya', 'umum', 24, '07:00:00', '10:00:00'),
+(2, '123002', 'Dr. Rani Susanti', 'gigi', 23, '15:00:00', '18:00:00'),
+(3, '123003', 'Dr. Budi Santoso', 'tht', 24, '08:00:00', '12:00:00'),
+(4, '123004', 'Dr. Clara Dewi', 'lansia & disabilitas', 24, '10:00:00', '14:00:00'),
+(5, '123005', 'Dr. Eka Purnama', 'balita', 23, '09:00:00', '11:00:00'),
 (6, '123006', 'Dr. Fahri Ananda', 'kia & kb', 24, '13:00:00', '15:00:00'),
 (7, '123007', 'Dr. Gina Maharani', 'nifas/pnc', 24, '15:00:00', '17:00:00');
 
@@ -107,13 +118,13 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(36, '2014_10_12_000000_create_users_table', 1),
-(37, '2014_10_12_100000_create_password_reset_tokens_table', 1),
-(38, '2019_08_19_000000_create_failed_jobs_table', 1),
-(39, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(40, '2025_02_23_223804_create_roles_table', 1),
-(41, '2025_02_23_223827_create_jadwal_dokter_table', 1),
-(42, '2025_03_06_194826_create_antrian_table', 1);
+(50, '2014_10_12_000000_create_users_table', 1),
+(51, '2014_10_12_100000_create_password_reset_tokens_table', 1),
+(52, '2019_08_19_000000_create_failed_jobs_table', 1),
+(53, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(54, '2025_02_23_223804_create_roles_table', 1),
+(55, '2025_02_23_223827_create_jadwal_dokter_table', 1),
+(56, '2025_03_06_194826_create_antrian_table', 1);
 
 -- --------------------------------------------------------
 
@@ -164,9 +175,9 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'dokter', '2025-04-26 08:14:47', '2025-04-26 08:14:47'),
-(2, 'pasien', '2025-04-26 08:14:47', '2025-04-26 08:14:47'),
-(3, 'admin', '2025-04-26 08:14:47', '2025-04-26 08:14:47');
+(1, 'dokter', '2025-04-28 03:37:19', '2025-04-28 03:37:19'),
+(2, 'pasien', '2025-04-28 03:37:19', '2025-04-28 03:37:19'),
+(3, 'admin', '2025-04-28 03:37:19', '2025-04-28 03:37:19');
 
 -- --------------------------------------------------------
 
@@ -197,10 +208,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role_id`, `tgl_lahir`, `alamat`, `jenis_kelamin`, `no_ktp`, `no_hp`, `pekerjaan`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@gmail.com', '2025-04-26 08:14:47', '$2y$12$hiy/0RRktoflqCm0A1PNaeKefUASEQE3qmcIN.bsiyXGMMd6A8Woa', 3, '1980-01-01', 'Kantor', 'laki-laki', '1234567890123456', '081234567890', 'Administrator', NULL, '2025-04-26 08:14:47', '2025-04-26 08:14:47'),
-(2, 'Adni Septi', 'adni@example.com', '2025-04-26 08:14:47', '$2y$12$4O32gG.ZaJR3Uz8HwjoCMuo61RTcIXWEtPRJYUz.LZA6qR.jsWoAe', 2, '1995-05-15', 'Alamat Adni Septi', 'perempuan', '2345678901234567', '082345678901', 'Kasir Minimarket', NULL, '2025-04-26 08:14:47', '2025-04-26 08:14:47'),
-(3, 'Fitran', 'fitran@gmail.com', '2025-04-26 08:14:47', '$2y$12$rJhs/3qqm4oVm1zSzsq2ZONe9rVrL48o8md1XNdeHUuJG.vuykvd6', 2, '2000-08-13', 'Desa Gatak', 'laki-laki', '1233216968547854', '081564332794', 'DJ', NULL, '2025-04-26 08:14:48', '2025-04-26 08:14:48'),
-(4, 'Boy', 'bima@gmail.com', NULL, '$2y$12$zbUkPJab1jophfrpe6M17ec7MdNUlF0kIsWZvZYWN2DvHQ4G.5lTW', 2, '2024-05-06', 'aaaaaaaaaaaaaaaaa', 'laki-laki', '1212121222222222', '0895422615117', 'Mhs', NULL, '2025-04-26 11:22:36', '2025-04-26 11:22:36');
+(1, 'admin', 'admin@gmail.com', '2025-04-28 03:37:19', '$2y$12$uTJULbN9JI/1zRBTLCtPOORvhaeV3TjUrtU5KSAxLMMHwlqTcqORK', 3, '1980-01-01', 'Kantor', 'laki-laki', '1234567890123456', '081234567890', 'Administrator', NULL, '2025-04-28 03:37:19', '2025-04-28 03:37:19'),
+(2, 'Adni Septi', 'adni@example.com', '2025-04-28 03:37:19', '$2y$12$lPmRi26HFWoHuK42AkyjsOoMxc9KVDzdsHz6bgqPLIvR3ugYmC05y', 2, '1995-05-15', 'Alamat Adni Septi', 'perempuan', '2345678901234567', '082345678901', 'Kasir Minimarket', NULL, '2025-04-28 03:37:19', '2025-04-28 03:37:19'),
+(3, 'Fitran', 'fitran@gmail.com', '2025-04-28 03:37:19', '$2y$12$o8yzQvaT8Jolfc/cMgJVfuKpwEp/XaOXPCiX3I.m9LrSsQ/5svqAG', 2, '2000-08-13', 'Desa Gatak', 'laki-laki', '1233216968547854', '081564332794', 'DJ', NULL, '2025-04-28 03:37:20', '2025-04-28 03:37:20');
 
 --
 -- Indexes for dumped tables
@@ -270,7 +280,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `antrian`
 --
 ALTER TABLE `antrian`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -288,7 +298,7 @@ ALTER TABLE `jadwal_dokter`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -306,7 +316,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

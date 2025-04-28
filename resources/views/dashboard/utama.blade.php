@@ -4,6 +4,28 @@
 
 @section('content') 
 <div class="container text-center">
+    <style>
+        .badge-warning {
+            background-color: #ffc107; 
+            color: #000; 
+        }
+
+        .badge-danger {
+            background-color: #cf1717;
+            color: #fff;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .badge {
+            font-size: 1rem; 
+            font-weight: bold; 
+        }
+    </style>
+
     <div class="row">
         <div class="d-flex justify-content-center col-md-3">
             <a href="/antrian" class="btn btn-primary w-100 h-80 mb-3" id="ambilAntrian">Ambil Antrian</a>
@@ -28,6 +50,7 @@
                                             <th>Tanggal</th>
                                             <th>Poli</th>
                                             <th>Dokter</th>
+                                            <th>Status</th> <!-- Kolom status -->
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -39,7 +62,16 @@
                                             <td>{{ $antrian->no_antrian }}</td>
                                             <td>{{ \Carbon\Carbon::parse($antrian->tgl_antrian)->locale('id')->translatedFormat('j F Y') }}</td>
                                             <td>{{ ucfirst($antrian->jadwalDokter->poli ?? '-') }}</td>
-                                            <td>{{ $antrian->jadwalDokter->nama_dokter ?? '-' }}</td>
+                                            <td>{{ $antrian->jadwalDokter->nama_dokter ?? '-' }}</td>                                       
+                                            <td>
+                                                <span class="badge 
+                                                    @if($antrian->status == 'ditunda') badge-warning
+                                                    @elseif($antrian->status == 'dipanggil') badge-success
+                                                    @elseif($antrian->status == 'dibatalkan') badge-danger
+                                                    @endif">
+                                                    {{ ucfirst($antrian->status) }}
+                                                </span>
+                                            </td>                                      
                                             <td>
                                                 <a href="{{ route('antrian.pdf', $antrian->id) }}" class="btn btn-primary" target="_blank">Cetak / Lihat PDF</a>
                                             </td>
@@ -54,10 +86,11 @@
             </div>
         </div>
 
+        <!-- Bagian Semua Antrian -->
         <div class="container">
             <div class="card mt-3">
                 <div class="card-body">
-                    <div class="card-title text-center">Semua Antrian</div>
+                    <div class="card-title text-center">Semua Antrian Hari Ini</div>
 
                     <div class="row">
                         <div class="col-md-9">
@@ -87,9 +120,6 @@
                                         </div>
                                     </div>
                                 </form>
-                                
-                                
-                                
                             </div>
                         </div>
                     </div>
@@ -106,6 +136,7 @@
                                             <th>Tanggal</th>
                                             <th>Poli</th>
                                             <th>Dokter</th>
+                                            <th>Status</th> <!-- Kolom status -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -117,6 +148,16 @@
                                             <td>{{ \Carbon\Carbon::parse($antrian->tgl_antrian)->locale('id')->translatedFormat('j F Y') }}</td>
                                             <td>{{ ucfirst($antrian->jadwalDokter->poli ?? '-') }}</td>
                                             <td>{{ $antrian->jadwalDokter->nama_dokter ?? '-' }}</td>
+                                            <td>
+                                                <!-- Menampilkan status antrian -->
+                                                <span class="badge 
+                                                    @if($antrian->status == 'ditunda') badge-warning
+                                                    @elseif($antrian->status == 'dipanggil') badge-success
+                                                    @elseif($antrian->status == 'dibatalkan') badge-danger
+                                                    @endif">
+                                                    {{ ucfirst($antrian->status) }}
+                                                </span>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

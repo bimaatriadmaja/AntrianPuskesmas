@@ -26,7 +26,8 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Antrian</a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/lihatantrian">Lihat Antrian</a></li>
+                <li><a class="dropdown-item" href="/lihat/antrian">Lihat Antrian Hari Ini</a></li>
+                <li><a class="dropdown-item" href="/laporan/antrian">Laporan Antrian</a></li>
               </ul>
             </li>
           </ul>

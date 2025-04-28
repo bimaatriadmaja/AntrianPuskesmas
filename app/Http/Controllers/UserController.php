@@ -30,35 +30,43 @@ class UserController extends Controller
     //     return view('dashboard.utama', compact('antrians', 'poli_list', 'search', 'poli_filter'));
     // }
     public function index(Request $request)
-{
-    $search = $request->get('search');
-    $poli_filter = $request->get('poli_filter');
+    {
+        $search = $request->get('search');
+        $poli_filter = $request->get('poli_filter');
+        $status_filter = $request->get('status'); // tambahkan input status (optional)
 
-    // Ambil antrian user login (tidak pakai paginate)
-    $myAntrians = Antrian::where('user_id', auth()->id())->get();
+        // Ambil antrian user login (tidak pakai paginate)
+        $myAntrians = Antrian::where('user_id', auth()->id())->get();
 
-    // Ambil semua antrian untuk ditampilkan di tabel bawah (pakai paginate)
-    $allAntrians = Antrian::query()
-        ->when($search, function ($query) use ($search) {
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%');
+        // Ambil semua antrian untuk ditampilkan di tabel bawah (pakai paginate)
+        $allAntrians = Antrian::query()
+            // Filter hanya antrian yang terjadi hari ini
+            ->whereDate('tgl_antrian', now()->toDateString())
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->whereHas('user', function ($q2) use ($search) {
+                        $q2->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('jadwalDokter', function ($q2) use ($search) {
+                        $q2->where('poli', 'like', '%' . $search . '%')
+                        ->orWhere('nama_dokter', 'like', '%' . $search . '%');
+                    })
+                    ->orWhere('status', 'like', '%' . $search . '%'); // cari berdasarkan status
+                });
             })
-            ->orWhereHas('jadwalDokter', function ($q) use ($search) {
-                $q->where('poli', 'like', '%' . $search . '%')
-                  ->orWhere('nama_dokter', 'like', '%' . $search . '%');
-            });
-        })
-        ->when($poli_filter, function ($query) use ($poli_filter) {
-            $query->whereHas('jadwalDokter', function ($q) use ($poli_filter) {
-                $q->where('poli', $poli_filter);
-            });
-        })
-        ->paginate(10)
-        ->withQueryString();
+            ->when($poli_filter, function ($query) use ($poli_filter) {
+                $query->whereHas('jadwalDokter', function ($q) use ($poli_filter) {
+                    $q->where('poli', $poli_filter);
+                });
+            })
+            ->when($status_filter, function ($query) use ($status_filter) {
+                $query->where('status', $status_filter);
+            })
+            ->paginate(10)
+            ->withQueryString();
 
-    return view('dashboard.utama', compact('myAntrians', 'allAntrians', 'search', 'poli_filter'));
-}
-
+        return view('dashboard.utama', compact('myAntrians', 'allAntrians', 'search', 'poli_filter', 'status_filter'));
+    }
 
 
     public function edit()

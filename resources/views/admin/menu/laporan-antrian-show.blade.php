@@ -27,7 +27,7 @@
     </style>
     <div class="card mt-3">
         <div class="card-body">
-            <div class="card-title" style="text-align: center">Antrian Hari Ini</div>
+            <div class="card-title" style="text-align: center">Semua Antrian</div>
             
             <!-- Pesan sukses jika ada -->
             @if(session('success'))
@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-md-9">
                     <div class="mb-3">
-                        <form method="GET" action="{{ route('admin.menu.antrian-show') }}">
+                        <form method="GET" action="{{ route('admin.menu.laporan-antrian-show') }}">
                             <div class="row mb-4">
                                 <div class="col-md-4">
                                     <input type="text" name="search" value="{{ request()->search }}" class="form-control" placeholder="Cari Nama">
@@ -65,7 +65,7 @@
 
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-primary">Cari</button>
-                                    <a href="{{ route('admin.menu.antrian-show') }}" class="btn btn-secondary">Reset</a>
+                                    <a href="{{ route('admin.menu.laporan-antrian-show') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
                         </form>
@@ -86,7 +86,7 @@
                                     <th>Nama Dokter</th>
                                     <th>Tanggal Antrian</th>
                                     <th>Status</th>
-                                    <th>Aksi</th> <!-- Kolom untuk aksi -->
+                                    {{-- <th>Aksi</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,10 +107,10 @@
                                                 {{ ucfirst($antrian->status) }}
                                             </span>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <!-- Tombol Update Status -->
                                             <a href="{{ route('antrian.editStatus', $antrian->id) }}" class="btn btn-primary btn-sm">Update Status</a>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

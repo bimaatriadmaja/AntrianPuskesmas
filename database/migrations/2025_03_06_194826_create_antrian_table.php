@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('jadwal_dokter_id')->constrained('jadwal_dokter')->onDelete('cascade');
             $table->date('tgl_antrian');
+            $table->enum('status', ['ditunda', 'dipanggil', 'dibatalkan'])->default('ditunda');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

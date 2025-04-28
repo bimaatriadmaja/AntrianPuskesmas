@@ -17,27 +17,27 @@ class AntrianController extends Controller
     public $poli_filter; 
     protected $queryString = ['search']; 
     
-    public function index(Request $request)
-{
-    $search = $request->get('search'); // Ambil parameter pencarian
+    // public function index(Request $request)
+    // {
+    //     $search = $request->get('search'); // Ambil parameter pencarian
 
-    // Menjalankan query untuk menggabungkan antrian, users, dan jadwal_dokter
-    $antrians = Antrian::query()
-        ->join('users', 'antrian.user_id', '=', 'users.id') // Join dengan tabel users
-        ->leftJoin('jadwal_dokter', 'antrian.jadwal_dokter_id', '=', 'jadwal_dokter.id') // Left join dengan jadwal_dokter
-        ->when($search, function ($query) use ($search) {
-            $query->where('users.name', 'like', '%' . $search . '%') // Cari berdasarkan nama pengguna
-                ->orWhere('jadwal_dokter.nama_dokter', 'like', '%' . $search . '%') // Cari berdasarkan nama dokter
-                ->orWhere('jadwal_dokter.poli', 'like', '%' . $search . '%'); // Cari berdasarkan poli
-        })
-        ->select('antrian.no_antrian', 'antrian.tgl_antrian', 'users.name', 'jadwal_dokter.poli', 'jadwal_dokter.nama_dokter') // Pilih kolom yang dibutuhkan
-        ->paginate(10); // Paginate hasilnya
+    //     // Menjalankan query untuk menggabungkan antrian, users, dan jadwal_dokter
+    //     $antrians = Antrian::query()
+    //         ->join('users', 'antrian.user_id', '=', 'users.id') // Join dengan tabel users
+    //         ->leftJoin('jadwal_dokter', 'antrian.jadwal_dokter_id', '=', 'jadwal_dokter.id') // Left join dengan jadwal_dokter
+    //         ->when($search, function ($query) use ($search) {
+    //             $query->where('users.name', 'like', '%' . $search . '%') // Cari berdasarkan nama pengguna
+    //                 ->orWhere('jadwal_dokter.nama_dokter', 'like', '%' . $search . '%') // Cari berdasarkan nama dokter
+    //                 ->orWhere('jadwal_dokter.poli', 'like', '%' . $search . '%'); // Cari berdasarkan poli
+    //         })
+    //         ->select('antrian.no_antrian', 'antrian.tgl_antrian', 'users.name', 'jadwal_dokter.poli', 'jadwal_dokter.nama_dokter') // Pilih kolom yang dibutuhkan
+    //         ->paginate(10); // Paginate hasilnya
 
-    // Mengambil daftar poli untuk filter
-    $poli_list = JadwalDokter::select('poli')->groupBy('poli')->pluck('poli');
+    //     // Mengambil daftar poli untuk filter
+    //     $poli_list = JadwalDokter::select('poli')->groupBy('poli')->pluck('poli');
 
-    return view('dashboard.utama', compact('antrians', 'search', 'poli_list')); // Kirim data ke view
-}
+    //     return view('dashboard.utama', compact('antrians', 'search', 'poli_list')); // Kirim data ke view
+    // }
 
 
     public function create()
@@ -152,30 +152,30 @@ class AntrianController extends Controller
         return $pdf->stream('antrian-' . $antrian->no_antrian . '.pdf');
     }
 
-    public function hapusSemua(Request $request)
-    {
-        // Ambil semua antrian yang ada
-        $antrians = Antrian::all();
+    // public function hapusSemua(Request $request)
+    // {
+    //     // Ambil semua antrian yang ada
+    //     $antrians = Antrian::all();
         
-        // Iterasi setiap antrian untuk mengembalikan kuota
-        foreach ($antrians as $antrian) {
-            // Cek apakah jadwal dokter ada
-            if ($antrian->jadwalDokter) {
-                // Ambil jadwal dokter
-                $jadwalDokter = $antrian->jadwalDokter;
+    //     // Iterasi setiap antrian untuk mengembalikan kuota
+    //     foreach ($antrians as $antrian) {
+    //         // Cek apakah jadwal dokter ada
+    //         if ($antrian->jadwalDokter) {
+    //             // Ambil jadwal dokter
+    //             $jadwalDokter = $antrian->jadwalDokter;
 
-                // Kembalikan kuota
-                $jadwalDokter->kuota += 1;
-                $jadwalDokter->save();
-            }
-        }
+    //             // Kembalikan kuota
+    //             $jadwalDokter->kuota += 1;
+    //             $jadwalDokter->save();
+    //         }
+    //     }
 
-        // Menghapus seluruh data antrian
-        Antrian::truncate();
+    //     // Menghapus seluruh data antrian
+    //     Antrian::truncate();
 
-        // Redirect kembali dengan pesan sukses
-        return redirect()->route('admin.menu.antrian-show')->with('success', 'Semua antrian telah dihapus dan kuota telah dikembalikan!');
-    }
+    //     // Redirect kembali dengan pesan sukses
+    //     return redirect()->route('admin.menu.antrian-show')->with('success', 'Semua antrian telah dihapus dan kuota telah dikembalikan!');
+    // }
     
 
     // Hapus otomatis pake windows task scheduler
@@ -204,6 +204,33 @@ class AntrianController extends Controller
     //     return response()->json([
     //         'message' => "$jumlahTerhapus antrian kadaluarsa berhasil dihapus dan kuota dokter telah ditambahkan."
     //     ]);
-    // }    
+    // }  
+    
+    public function editStatus($id)
+    {
+        // Cari antrian berdasarkan ID
+        $antrian = Antrian::findOrFail($id);
+
+        // Tampilkan halaman untuk mengubah status
+        return view('admin.menu.edit-status-antrian', compact('antrian'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        // Validasi status yang dikirimkan
+        $request->validate([
+            'status' => 'required|in:ditunda,dipanggil,dibatalkan',
+        ]);
+
+        // Cari antrian berdasarkan ID
+        $antrian = Antrian::findOrFail($id);
+
+        // Perbarui status
+        $antrian->status = $request->status;
+        $antrian->save();
+
+        // Kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->route('admin.menu.antrian-show')->with('success', 'Status antrian berhasil diperbarui.');
+    }
 
 }

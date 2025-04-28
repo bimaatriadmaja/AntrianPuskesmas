@@ -11,7 +11,7 @@ class Antrian extends Model
 
     protected $table = 'antrian';
 
-    protected $fillable = ['user_id', 'no_antrian', 'jadwal_dokter_id', 'tgl_antrian', 'poli'];
+    protected $fillable = ['user_id', 'no_antrian', 'jadwal_dokter_id', 'tgl_antrian', 'poli', 'status'];
 
     public function user()
     {
