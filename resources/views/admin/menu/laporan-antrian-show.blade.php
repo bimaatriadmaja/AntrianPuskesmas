@@ -48,11 +48,11 @@
                     <div class="mb-3">
                         <form method="GET" action="{{ route('admin.menu.laporan-antrian-show') }}">
                             <div class="row mb-4">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <input type="text" name="search" value="{{ request()->search }}" class="form-control" placeholder="Cari Nama">
                                 </div>
-
-                                <div class="col-md-4">
+                        
+                                <div class="col-md-3">
                                     <select name="poli_filter" class="form-select">
                                         <option value="">-- Pilih Poli --</option>
                                         @foreach($poli_list as $poli)
@@ -62,13 +62,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-                                <div class="col-md-4">
+                        
+                                <div class="col-md-3">
+                                    <input type="date" name="tanggal_filter" value="{{ request()->tanggal_filter }}" class="form-control">
+                                </div>
+                        
+                                <div class="col-md-3">
                                     <button type="submit" class="btn btn-primary">Cari</button>
                                     <a href="{{ route('admin.menu.laporan-antrian-show') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
-                        </form>
+                        </form>                        
                     </div>
                 </div>
             </div>

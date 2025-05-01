@@ -150,20 +150,17 @@ class AdminController extends Controller
     
     public function laporanAntrian(Request $request)
     {
-        // Ambil data search dan poli_filter dari request
         $search = $request->get('search');
         $poli_filter = $request->get('poli_filter');
+        $tanggal_filter = $request->get('tanggal_filter');
 
-        // Ambil list poli untuk filter
         $poli_list = JadwalDokter::select('poli')->distinct()->pluck('poli');
 
-        // Ambil antrian dengan relasi ke jadwal_dokter
         $antrians = Antrian::with('jadwalDokter')
             ->when($search, function ($query) use ($search) {
                 $query->where(function($q) use ($search) {
-                    // Cari berdasarkan kolom-kolom yang relevan
                     $q->where('no_antrian', 'like', '%' . $search . '%')
-                    ->orWhere('status', 'like', '%' . $search . '%') // Tambahkan pencarian berdasarkan status
+                    ->orWhere('status', 'like', '%' . $search . '%')
                     ->orWhereHas('user', function ($q) use ($search) {
                         $q->where('name', 'like', '%' . $search . '%');
                     })
@@ -178,12 +175,13 @@ class AdminController extends Controller
                     $q->where('poli', $poli_filter);
                 });
             })
+            ->when($tanggal_filter, function ($query) use ($tanggal_filter) {
+                $query->whereDate('tgl_antrian', $tanggal_filter);
+            })
             ->paginate(10);
 
-        // Return view dengan data antrian dan list poli
-        return view('admin.menu.laporan-antrian-show', compact('antrians', 'poli_list', 'search', 'poli_filter'));
+        return view('admin.menu.laporan-antrian-show', compact('antrians', 'poli_list', 'search', 'poli_filter', 'tanggal_filter'));
     }
-
 
     public function panduan()
     {
