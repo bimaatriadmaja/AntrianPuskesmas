@@ -76,6 +76,7 @@ Route::middleware(['admin'])->group(function() {
     // Route::delete('/admin/antrian/hapus-semua', [AntrianController::class, 'hapusSemua'])->name('admin.antrian.hapusSemua');
     Route::get('/antrian/edit-status/{id}', [AntrianController::class, 'editStatus'])->name('antrian.editStatus');
     Route::post('/antrian/update-status/{id}', [AntrianController::class, 'updateStatus'])->name('antrian.updateStatus');
+    Route::post('/admin/jadwal/reset-kuota', [JadwalDokterController::class, 'resetKuota'])->name('jadwal.resetKuota');
 });
 
 

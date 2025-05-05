@@ -98,4 +98,13 @@ class JadwalDokterController extends Controller {
             ->with('success', 'Jadwal berhasil dihapus!');
     }
 
+    public function resetKuota()
+    {
+        JadwalDokter::query()->update([
+            'kuota' => 25,
+        ]);
+
+        return redirect()->back()->with('success', 'Kuota semua dokter berhasil direset ke 25.');
+    }
+
 }
