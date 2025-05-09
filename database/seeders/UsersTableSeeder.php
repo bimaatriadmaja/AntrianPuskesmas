@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         Role::create([
-            'role'  => 'dokter'
+            'role'  => 'perawat'
         ]);
         Role::create([
             'role'  => 'pasien'
@@ -46,17 +46,17 @@ class UsersTableSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Adni Septi',
-            'email' => 'adni@example.com',
+            'name' => 'Mbak Perawat',
+            'email' => 'perawat@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('aaaaaaaa'),
-            'role_id' => 2,
+            'role_id' => 1,
             'tgl_lahir' => '1995-05-15',
-            'alamat' => 'Alamat Adni Septi',
+            'alamat' => 'Alamat e Mbak Perawat',
             'jenis_kelamin' => 'perempuan',
             'no_ktp' => '2345678901234567',
             'no_hp' => '082345678901',
-            'pekerjaan' => 'Kasir Minimarket',
+            'pekerjaan' => 'Perawat',
             'remember_token' => null,
             'created_at' => now(),
             'updated_at' => now(),

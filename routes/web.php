@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\JadwalDokterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\PerawatController;
+use App\Http\Controllers\JadwalDokterController;
+use App\Http\Controllers\Auth\RegisterController;
 
 
 /*
@@ -41,7 +42,7 @@ Route::get('/profile', [UserController::class, 'profile'])->name('user.profile')
 Route::resource('jadwal', JadwalDokterController::class);
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:pasien'])->group(function () {
     // Route::get('/antrian/index', [AntrianController::class, 'index'])->name('dashboard.antrian.index');
     Route::get('/antrian', [AntrianController::class, 'create'])->name('dashboard.antrian.create');
     Route::post('/antrian', [AntrianController::class, 'store'])->name('antrian.store');
@@ -51,8 +52,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/antrian-pdf/{id}', [AntrianController::class, 'cetakAntrian'])->name('antrian.pdf');
     // Route::get('/hapus-antrian-kadaluarsa', [AntrianController::class, 'hapusAntrianKadaluarsa']); //ini otomatis pake windows task scheduler
     Route::get('/panduan-sistem', [UserController::class, 'panduan'])->name('panduan.index');
-
-
 });
 
 Route::middleware(['admin'])->group(function() {
@@ -70,13 +69,16 @@ Route::middleware(['admin'])->group(function() {
     Route::get('/edit-jadwal/{id}/edit', [JadwalDokterController::class, 'editjadwal'])->name('admin.menu.jadwal-edit');
     Route::put('/edit-jadwal/{id}', [JadwalDokterController::class, 'updatejadwal'])->name('admin.menu.jadwal-update');
     Route::delete('/jadwal/{id}', [JadwalDokterController::class, 'destroy'])->name('admin.menu.jadwal-destroy');
-    Route::get('/lihat/antrian', [AdminController::class, 'lihatAntrian'])->name('admin.menu.antrian-show');
     Route::get('/laporan/antrian', [AdminController::class, 'laporanAntrian'])->name('admin.menu.laporan-antrian-show');
     Route::get('/panduan/admin', [AdminController::class, 'panduan'])->name('admin.panduan.index');
     // Route::delete('/admin/antrian/hapus-semua', [AntrianController::class, 'hapusSemua'])->name('admin.antrian.hapusSemua');
-    Route::get('/antrian/edit-status/{id}', [AntrianController::class, 'editStatus'])->name('antrian.editStatus');
-    Route::post('/antrian/update-status/{id}', [AntrianController::class, 'updateStatus'])->name('antrian.updateStatus');
     Route::post('/admin/jadwal/reset-kuota', [JadwalDokterController::class, 'resetKuota'])->name('jadwal.resetKuota');
+});
+
+Route::middleware(['auth', 'perawat'])->group(function () {
+    Route::get('/perawat', [PerawatController::class, 'index'])->name('perawat.index');
+    Route::get('/antrian/edit-status/{id}', [PerawatController::class, 'editStatus'])->name('antrian.editStatus');
+    Route::post('/antrian/update-status/{id}', [PerawatController::class, 'updateStatus'])->name('antrian.updateStatus');
 });
 
 

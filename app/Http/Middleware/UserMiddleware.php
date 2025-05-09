@@ -18,9 +18,10 @@ class UserMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->email != 'admin@gmail.com') {
+        if (auth()->check() && auth()->user()->role->role == 'pasien') {
             return $next($request);
         }
+
 
         return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke halaman ini');
     }

@@ -29,7 +29,7 @@ class LoginController extends Controller
     {
         switch ($roleId) {
             case 1:
-                return '/dashboard';
+                return '/perawat';
             case 3:
                 return '/admin';
             case 2:

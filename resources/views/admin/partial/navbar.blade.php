@@ -23,12 +23,8 @@
                 <li><a class="dropdown-item" href="/tambahjadwal">Tambah Dokter dan Jadwal</a></li>
               </ul>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Antrian</a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/lihat/antrian">Lihat Antrian Hari Ini</a></li>
-                <li><a class="dropdown-item" href="/laporan/antrian">Laporan Antrian</a></li>
-              </ul>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/laporan/antrian">Laporan Antrian</a>
             </li>
           </ul>
             <div class="d-flex w-100 justify-content-end">

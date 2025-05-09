@@ -1,6 +1,6 @@
-@extends('admin.layouts.app')
+@extends('perawat.layouts.app')
 
-@section('title', 'Antrian') 
+@section('title', 'Antrian Hari Ini') 
 
 @section('content')
 <div class="container">
@@ -71,7 +71,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary mb-5">Update Status</button>
-        <a href="{{ route('admin.menu.antrian-show') }}" class="btn btn-secondary mb-5">Cancel</a>
+        <a href="{{ route('perawat.index') }}" class="btn btn-secondary mb-5">Cancel</a>
     </form>
 </div>
 @endsection

@@ -1,6 +1,6 @@
-@extends('admin.layouts.app')
+@extends('perawat.layouts.app')
 
-@section('title', 'Antrian') 
+@section('title', 'Perawat') 
 
 @section('content') 
 <div class="container">
@@ -36,17 +36,10 @@
                 </div>
             @endif
 
-            <!-- Tombol untuk menghapus seluruh antrian -->
-            {{-- <form action="{{ route('admin.antrian.hapusSemua') }}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus semua antrian?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger mb-3">Hapus Semua Antrian</button>
-            </form> --}}
-
             <div class="row">
                 <div class="col-md-9">
                     <div class="mb-3">
-                        <form method="GET" action="{{ route('admin.menu.antrian-show') }}">
+                        <form method="GET" action="{{ route('perawat.index') }}">
                             <div class="row mb-4">
                                 <div class="col-md-4">
                                     <input type="text" name="search" value="{{ request()->search }}" class="form-control" placeholder="Cari Nama">
@@ -65,7 +58,7 @@
 
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-primary">Cari</button>
-                                    <a href="{{ route('admin.menu.antrian-show') }}" class="btn btn-secondary">Reset</a>
+                                    <a href="{{ route('perawat.index') }}" class="btn btn-secondary">Reset</a>
                                 </div>
                             </div>
                         </form>
